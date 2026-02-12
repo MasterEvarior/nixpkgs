@@ -1,4 +1,5 @@
 {
+  stdenvNoCC,
   lib,
   vscode-utils,
   vscode-extension-update-script,
@@ -9,12 +10,26 @@
 }:
 
 vscode-utils.buildVscodeMarketplaceExtension {
-  mktplcRef = {
-    name = "harper";
-    publisher = "elijah-potter";
-    version = harper.version;
-    hash = "sha256-rN8aQXDoUje5flRA1T4rw+CVWW9RQRNKtj6ktaAyJQ0=";
-  };
+  mktplcRef =
+    let
+      sources = {
+        "x86_64-linux" = {
+          arch = "linux-x64";
+          hash = "sha256-hjpdSmM69kftS8WxAAxODKli0uNJKJg+5nLHD1O7dVY=";
+        };
+        "aarch64-linux" = {
+          arch = "linux-arm64";
+          hash = "sha256-+Fy8Zro1Wo1gSBDUmFSazTPLH7LVTjmD98Rv3NQYYUg=";
+        };
+      };
+    in
+    {
+      name = "harper";
+      publisher = "elijah-potter";
+      version = harper.version;
+    }
+    // sources.${stdenvNoCC.hostPlatform.system}
+      or (throw "Unsupported system ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     jq
@@ -36,5 +51,9 @@ vscode-utils.buildVscodeMarketplaceExtension {
     homepage = "https://github.com/automattic/harper";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ MasterEvarior ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }
