@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tgeraser";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "en9inerd";
     repo = "tgeraser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xqims4Xfo7FH5nkq6mffkLhBbfq4lCJW3gBhL8assL8=";
+    hash = "sha256-8RcOfA7rGgVjkOrsBpCf9RsJ93xtS65hIUe1vPDpPNI=";
   };
 
   build-system = [ python3Packages.setuptools ];

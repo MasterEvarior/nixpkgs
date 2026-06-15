@@ -23,6 +23,7 @@ let
     pipe
     singleton
     strings
+    toJSON
     toPretty
     types
     versionAtLeast
@@ -37,6 +38,7 @@ let
     toKeyValue
     toLua
     mkLuaInline
+    toPlist
     ;
 
   inherit (lib.types)
@@ -81,6 +83,8 @@ let
       str
       ;
   };
+
+  json2x = pkgs.buildPackages.callPackage ./formats/json2x/package.nix { };
 in
 optionalAttrs allowAliases aliases
 // rec {
@@ -140,11 +144,13 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ jq ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              value = toJSON value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               jq . "$valuePath" > $out
             ''
         ) { };
@@ -163,11 +169,13 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal_0_17 ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              value = toJSON value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
@@ -186,11 +194,13 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ remarshal ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              value = toJSON value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
@@ -242,12 +252,23 @@ optionalAttrs allowAliases aliases
             description = "section of an INI file (attrs of " + atom.description + ")";
           };
 
-        maybeToList =
+        maybeCoerceList =
           listToValue:
           if listToValue != null then
             mapAttrs (key: val: if isList val then listToValue val else val)
           else
             id;
+        maybeCoerceAllLists =
+          listToValue:
+          if listToValue != null then
+            mapAttrs (_: mapAttrs (key: val: if isList val then listToValue val else val))
+          else
+            id;
+
+        ignoredArgs = [
+          "listToValue"
+          "atomsCoercedToLists"
+        ];
       in
       {
         ini =
@@ -278,13 +299,8 @@ optionalAttrs allowAliases aliases
             generate =
               name: value:
               pipe value [
-                (mapAttrs (_: maybeToList listToValue))
-                (toINI (
-                  removeAttrs args [
-                    "listToValue"
-                    "atomsCoercedToLists"
-                  ]
-                ))
+                (maybeCoerceAllLists listToValue)
+                (toINI (removeAttrs args ignoredArgs))
                 (pkgs.writeText name)
               ];
           };
@@ -333,15 +349,10 @@ optionalAttrs allowAliases aliases
                 ...
               }:
               pkgs.writeText name (
-                toINIWithGlobalSection
-                  (removeAttrs args [
-                    "listToValue"
-                    "atomsCoercedToLists"
-                  ])
-                  {
-                    globalSection = maybeToList listToValue globalSection;
-                    sections = mapAttrs (_: maybeToList listToValue) sections;
-                  }
+                toINIWithGlobalSection (removeAttrs args ignoredArgs) {
+                  globalSection = maybeCoerceList listToValue globalSection;
+                  sections = maybeCoerceAllLists listToValue sections;
+                }
               );
           };
 
@@ -349,7 +360,7 @@ optionalAttrs allowAliases aliases
           {
             listsAsDuplicateKeys ? false,
             ...
-          }@args:
+          }:
           let
             atom = iniAtom {
               inherit listsAsDuplicateKeys;
@@ -388,7 +399,7 @@ optionalAttrs allowAliases aliases
     // {
       generate =
         name: value:
-        lib.warn
+        warn
           "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
           rawFormat.generate
           name
@@ -440,37 +451,38 @@ optionalAttrs allowAliases aliases
         attrsOf atom;
 
       generate =
-        name: value:
         let
-          transformedValue =
+          transformValue =
             if listToValue != null then
-              mapAttrs (key: val: if isList val then listToValue val else val) value
+              mapAttrs (key: val: if isList val then listToValue val else val)
             else
-              value;
+              id;
+          finalArgs = removeAttrs args [ "listToValue" ];
         in
-        pkgs.writeText name (toKeyValue (removeAttrs args [ "listToValue" ]) transformedValue);
+        name: value: pkgs.writeText name (toKeyValue finalArgs (transformValue value));
 
     };
 
   toml =
     { }:
-    json { }
-    // {
+    {
       type = types.toml;
 
       generate =
         name: value:
         pkgs.callPackage (
-          { runCommand, remarshal }:
+          { runCommand }:
           runCommand name
             {
-              nativeBuildInputs = [ remarshal ];
+              nativeBuildInputs = [ json2x ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
-              json2toml "$valuePath" "$out"
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
+              json2x toml "$valuePath" "$out"
             ''
         ) { };
 
@@ -487,8 +499,7 @@ optionalAttrs allowAliases aliases
   */
   cdn =
     { }:
-    json { }
-    // {
+    {
       type = serializableValueWith { typeName = "CDN"; };
 
       generate =
@@ -498,11 +509,13 @@ optionalAttrs allowAliases aliases
           runCommand name
             {
               nativeBuildInputs = [ json2cdn ];
-              value = builtins.toJSON value;
-              passAsFile = [ "value" ];
+              value = toJSON value;
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -542,9 +555,6 @@ optionalAttrs allowAliases aliases
     [Tuple]: <https://hexdocs.pm/elixir/Tuple.html>
   */
   elixirConf =
-    {
-      elixir ? pkgs.elixir,
-    }:
     let
       toElixir =
         value:
@@ -611,12 +621,14 @@ optionalAttrs allowAliases aliases
       tuple = values: "{${listContent values}}";
 
       toConf =
-        values:
         let
           keyConfig =
             rootKey: key: value:
             "config ${rootKey}, ${key}, ${toElixir value}";
           keyConfigs = rootKey: values: mapAttrsToList (keyConfig rootKey) values;
+        in
+        values:
+        let
           rootConfigs = flatten (mapAttrsToList keyConfigs values);
         in
         ''
@@ -625,6 +637,9 @@ optionalAttrs allowAliases aliases
           ${concatStringsSep "\n" rootConfigs}
         '';
     in
+    {
+      elixir ? pkgs.elixir,
+    }:
     {
       type =
         let
@@ -734,12 +749,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -783,14 +798,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -801,7 +816,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
       # Alias for mkLuaInline
-      lib.mkRaw = lib.mkLuaInline;
+      lib.mkRaw = mkLuaInline;
     };
 
   nixConf =
@@ -825,14 +840,12 @@ optionalAttrs allowAliases aliases
             float
             str
             path
-            package
+            types.package
           ]);
         in
         attrsOf atomType;
       generate =
-        name: value:
         let
-
           # note that list type has been omitted here as the separator varies, see `nix.settings.*`
           mkValueString =
             v:
@@ -860,8 +873,8 @@ optionalAttrs allowAliases aliases
           mkKeyValuePairs = attrs: concatStringsSep "\n" (mapAttrsToList mkKeyValue attrs);
 
           isExtra = key: hasPrefix "extra-" key;
-
         in
+        name: value:
         pkgs.writeTextFile {
           inherit name;
           # workaround for https://github.com/NixOS/nix/issues/9487
@@ -874,7 +887,7 @@ optionalAttrs allowAliases aliases
             ${mkKeyValuePairs (filterAttrs (key: _: isExtra key) value)}
             ${extraOptions}
           '';
-          checkPhase = lib.optionalString checkConfig (
+          checkPhase = optionalString checkConfig (
             if pkgs.stdenv.hostPlatform != pkgs.stdenv.buildPlatform then
               ''
                 echo "Ignoring validation for cross-compilation"
@@ -929,9 +942,9 @@ optionalAttrs allowAliases aliases
                 python3
                 black
               ];
-              imports = builtins.toJSON (value._imports or [ ]);
-              value = builtins.toJSON (removeAttrs value [ "_imports" ]);
-              pythonGen = ''
+              imports = toJSON (value._imports or [ ]);
+              value = toJSON (removeAttrs value [ "_imports" ]);
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
@@ -964,16 +977,16 @@ optionalAttrs allowAliases aliases
                     for key, value in json.load(f).items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "imports"
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              export importsPath="$TMPDIR/imports"
+              printf "%s" "$imports" > "$importsPath"
+              export valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -1002,8 +1015,8 @@ optionalAttrs allowAliases aliases
                   python3Packages.xmltodict
                   libxml2Python
                 ];
-                value = builtins.toJSON value;
-                pythonGen = ''
+                value = toJSON value;
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
@@ -1013,14 +1026,13 @@ optionalAttrs allowAliases aliases
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                export valuePath="$TMPDIR/value"
+                printf "%s" "$value" > "$valuePath"
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };
@@ -1051,11 +1063,10 @@ optionalAttrs allowAliases aliases
         in
         valueType;
 
-      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+      generate = name: value: pkgs.writeText name (toPlist { inherit escape; } value);
     };
 
   hcl1 =
-    args:
     let
       # Helper function to recursively transform values for HCL1 canonicalization
       # Rule: If an attribute value is an attribute set, wrap it in a list
@@ -1071,6 +1082,7 @@ optionalAttrs allowAliases aliases
           value;
       jsonFormat = json { };
     in
+    args:
     jsonFormat
     // {
       generate = name: value: jsonFormat.generate name (mapAttrs (_: transform) value);

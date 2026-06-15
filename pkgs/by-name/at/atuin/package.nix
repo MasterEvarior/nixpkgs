@@ -10,25 +10,27 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.12.1";
+  version = "18.16.1";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ojIL8Iy74UgFE4Mp75oHWbZDsFRKRhOBdkPP/TtZpz4=";
+    hash = "sha256-XrJFetPs7TsbX5Cxekj+h3hlmQLoOpB7U+c36NM/jeA=";
   };
 
-  cargoHash = "sha256-KamAFi6OHE38ss8rIncNecNMVjd8gAeSWMh8G7Yb/rQ=";
+  cargoHash = "sha256-eqxeE7+UxBTdaYjlonOz6pYQ3mar8lNUd/K0CSuzquc=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
+    "ai"
     "client"
-    "sync"
     "clipboard"
     "daemon"
+    "hex"
+    "sync"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -56,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) atuin;
+      inherit (nixosTests) atuin atuin-programs;
     };
     updateScript = nix-update-script { };
   };

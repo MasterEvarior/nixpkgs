@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dsearch";
-  version = "0.2.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "AvengeMedia";
     repo = "danksearch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2o4oJgATtrhHUihmQlFhZBhx8qXFnxsgiXzfGairHhQ=";
+    hash = "sha256-pEJgw0so89I/dELzYK58kwFASA+x+TH2D6moXdaFY4E=";
   };
 
-  vendorHash = "sha256-cBBfIil7IYAXlQN8OyoJwsNxyYC0pruloaJrZZGovU4=";
+  vendorHash = "sha256-scvZWbMHAhpYWCU0xZK1E6h6sAkoXegqI1iYS44fcCg=";
 
   ldflags = [
     "-w"

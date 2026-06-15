@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kine";
-  version = "0.14.12";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "k3s-io";
     repo = "kine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/8qTtnlZhEDkb+V7KOB2VT9dkQRTYFSZN8Cmx2i9BGw=";
+    hash = "sha256-1hVhmWWVqhFceJhzFKuqF66YFHRoue+wrqrF0KtW3No=";
   };
 
-  vendorHash = "sha256-AVlq/1+ESjx8tcndaDHk5xDY0jFCJ7LqIjuj1Ccm/dE=";
+  vendorHash = "sha256-LJ9CxLxIzydXyz5EdgXzo16X6oJWguIQwKlzQ33fGeU=";
 
   ldflags = [
     "-s"

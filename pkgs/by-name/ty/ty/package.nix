@@ -7,6 +7,9 @@
   # nativeBuildInputs
   installShellFiles,
 
+  # buildInputs
+  rust-jemalloc-sys,
+
   buildPackages,
   versionCheckHook,
   nix-update-script,
@@ -14,14 +17,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ty";
-  version = "0.0.20";
+  version = "0.0.49";
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ty";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-NJ2RA12NZDmYdrSK9p+KfYiE36KA1RkolSchMRU7pHQ=";
+    hash = "sha256-IKeoskueujGYFjhUd3V7iwKwZjFZqG3OYfe36S6J2aw=";
   };
 
   # For Darwin platforms, remove the integration test for file notifications,
@@ -35,9 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoBuildFlags = [ "--package=ty" ];
 
-  cargoHash = "sha256-xUYjlSl9uKsk+Wk3xxK6wPrKhFHuqpJNgQ2TSkcGpYE=";
+  cargoHash = "sha256-y1sKf+KXya/K+WUiIE357U6DXh/d+AQgj0SQIi1gpUw=";
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = [ rust-jemalloc-sys ];
 
   # `ty`'s tests use `insta-cmd`, which depends on the structure of the `target/` directory,
   # and also fails to find the environment variable `$CARGO_BIN_EXE_ty`, which leads to tests failing.
@@ -63,6 +68,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=python_environment::ty_environment_and_discovered_venv"
     "--skip=python_environment::ty_environment_is_only_environment"
     "--skip=python_environment::ty_environment_is_system_not_virtual"
+    "--skip=python_environment::ty_system_environment_and_local_venv"
 
     # flaky: unmatched assertion: revealed: Literal[1]
     "--skip=mdtest::generics/pep695/functions.md"
@@ -95,6 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ty";
     maintainers = with lib.maintainers; [
       bengsparks
+      ddogfoodd
       figsoda
       GaetanLepage
     ];

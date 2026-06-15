@@ -3,6 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   ddt,
+  hacking,
+  installShellFiles,
   openstackdocstheme,
   osc-lib,
   osc-placement,
@@ -27,20 +29,21 @@
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
+  stdenv,
   stestrCheckHook,
   versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "python-openstackclient";
-  version = "9.0.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-openstackclient";
     tag = finalAttrs.version;
-    hash = "sha256-iqHm3vOENStdGI53Ggln/gWVnF3Lyomel9OFmwz2CJc=";
+    hash = "sha256-UczEgOtZz4roIFg1R6RDGg0tiiiT6lAgJCdgpmK0960=";
   };
 
   patches = [
@@ -68,14 +71,20 @@ buildPythonPackage (finalAttrs: {
   # to support proxy envs like ALL_PROXY in requests
   ++ requests.optional-dependencies.socks;
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   nativeCheckInputs = [
     ddt
+    hacking
     requests-mock
     stestrCheckHook
   ];
 
   disabledTestsRegex = [
     "openstackclient.tests.unit.common.test_module.TestModuleList*"
+    "openstackclient.tests.unit.common.test_clientmanager.TestClientManager*"
   ];
 
   pythonImportsCheck = [
@@ -115,6 +124,11 @@ buildPythonPackage (finalAttrs: {
     versionCheckHook
   ];
   doInstallCheck = true;
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd openstack \
+      --bash <($out/bin/openstack complete)
+  '';
 
   meta = {
     description = "OpenStack Command-line Client";

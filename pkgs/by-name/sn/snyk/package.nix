@@ -4,7 +4,6 @@
   fetchFromGitHub,
   testers,
   snyk,
-  nodejs_20,
 }:
 
 let
@@ -33,8 +32,6 @@ buildNpmPackage {
     find -L $out -type l -print -delete
   '';
 
-  nodejs = nodejs_20;
-
   npmBuildScript = "build:prod";
 
   passthru.tests.version = testers.testVersion {
@@ -46,7 +43,7 @@ buildNpmPackage {
     homepage = "https://snyk.io";
     changelog = "https://github.com/snyk/cli/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ momeemt ];
+    maintainers = [ ];
     mainProgram = "snyk";
   };
 }

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchpatch2,
   fetchPypi,
 
   # build-system
@@ -14,12 +13,14 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
   pygments,
   pymdown-extensions,
   pyyaml,
+  pyzmq,
   ruff,
   starlette,
   tomlkit,
@@ -29,28 +30,20 @@
   # tests
   versionCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.19.4";
+  version = "0.23.6";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7sO3ZcP9mNY+IBfFagJOd5ppI8tW52gueIdtT+SUCbc=";
+    hash = "sha256-1jru7h6ep8rHm/JTDaupFRmRU9zk0Vb63nVGR0Z508o=";
   };
 
-  patches = [
-    # https://github.com/marimo-team/marimo/pull/6714
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/Prince213/marimo/commit/b1c690e82e8117c451a74fdf172eb51a4861853d.patch?full_index=1";
-      hash = "sha256-iFS5NSGjaGdECRk0LCRSA8XzRb1/sVSZCTRLy6taHNU=";
-    })
-  ];
-
   build-system = [ uv-build ];
+
+  pythonRelaxDeps = [ "jedi" ];
 
   dependencies = [
     click
@@ -59,12 +52,14 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec
     narwhals
     packaging
     psutil
     pygments
     pymdown-extensions
     pyyaml
+    pyzmq
     ruff
     starlette
     tomlkit

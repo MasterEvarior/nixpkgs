@@ -1,18 +1,17 @@
 {
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
-  k3s,
   lib,
   nixosTests,
   symlinkJoin,
 }:
 
 let
-  version = "3.5.27";
-  etcdSrcHash = "sha256-ne0uKpS7KQL/Efi5sMdnD8PQl5phDivBEM1PrsSxVf4=";
-  etcdServerVendorHash = "sha256-6vu0ttbes5uN+m/tW/zuPZgyc1z+VcNpoJauykxBUUY=";
-  etcdUtlVendorHash = "sha256-Z8Rc19p5Sigg71/r9yURE6LNHqHjah3b/ZfxI0nH4qc=";
-  etcdCtlVendorHash = "sha256-uAo50jN69YKuW3NCRtc9HE8AnqKWtZQ+sJvwgw1BJj0=";
+  version = "3.5.31";
+  etcdSrcHash = "sha256-X3b1TBimNYo03fW0c5NeiD4uALMqtOQbJwPot11FCk8=";
+  etcdServerVendorHash = "sha256-1/XJGpyYuTsb+1hReksX5VyD+6xbKaiLA8520cDKc/4=";
+  etcdUtlVendorHash = "sha256-dUXAoIcOSlEbiSmy1M+oPaHt089gOttQwrB9ZhYc7v0=";
+  etcdCtlVendorHash = "sha256-l1j00Mzv1z021rfBbFZrIce2pifQyRkST0bkZhVoST0=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -31,11 +30,12 @@ let
     homepage = "https://etcd.io/";
     maintainers = with lib.maintainers; [
       dtomvan
+      superherointj
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
-  etcdserver = buildGo124Module {
+  etcdserver = buildGoModule {
     pname = "etcdserver";
 
     inherit
@@ -62,7 +62,7 @@ let
     ldflags = [ "-X go.etcd.io/etcd/api/v3/version.GitSHA=GitNotFound" ];
   };
 
-  etcdutl = buildGo124Module {
+  etcdutl = buildGoModule {
     pname = "etcdutl";
 
     inherit
@@ -77,7 +77,7 @@ let
     modRoot = "./etcdutl";
   };
 
-  etcdctl = buildGo124Module {
+  etcdctl = buildGoModule {
     pname = "etcdctl";
 
     inherit

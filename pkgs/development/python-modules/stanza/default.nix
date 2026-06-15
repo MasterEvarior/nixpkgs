@@ -9,23 +9,25 @@
   networkx,
   numpy,
   peft,
+  platformdirs,
   protobuf,
   requests,
   torch,
   tqdm,
   transformers,
+  udtools,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "stanza";
-  version = "1.11.0";
+  version = "1.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = "stanza";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zY2+8QuPJTX/HSkE/gKMCWpSanKpYSGZeeYgb4eFuuw=";
+    hash = "sha256-hUI8sZDwBK8ZRS9asyDiTqpoIGnGbHeH/Q9i/gasut0=";
   };
 
   build-system = [ setuptools ];
@@ -35,11 +37,13 @@ buildPythonPackage (finalAttrs: {
     networkx
     numpy
     peft
+    platformdirs
     protobuf
     requests
     torch
     tqdm
     transformers
+    udtools
   ];
 
   # Most tests require resources from the network (models). Many of the ones that do run are slow

@@ -1,138 +1,138 @@
 {
   "images-calico-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-calico.linux-amd64.tar.gz",
-    "sha256": "2910dbfb8e1757da596cbe0dc9040b47cb465d900fba641aba9d6c7e7f9f89c2"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-calico.linux-amd64.tar.gz",
+    "sha256": "dd6d234775759b8abdd3a87a1a748f92db648f096cc9381eb27afd8ae8186f20"
   },
   "images-calico-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-calico.linux-amd64.tar.zst",
-    "sha256": "eddf7009b6eb86092b3478ac3e05a6092cc7213a0e0414f4f70388de5f9126be"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-calico.linux-amd64.tar.zst",
+    "sha256": "1c10516660617d6db897bec16e362b4c4e4a0c1f43f08bb9a87663e051d8b806"
   },
   "images-calico-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-calico.linux-arm64.tar.gz",
-    "sha256": "921d65d0b56ecaa07be68486781ca8e70f302d19962a25c9a194b9063aca8c0d"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-calico.linux-arm64.tar.gz",
+    "sha256": "02a2df53bea7805ee124e17db2263d17588a74d091c9656dd07052bcaf7fc159"
   },
   "images-calico-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-calico.linux-arm64.tar.zst",
-    "sha256": "3548ad9d6b8f58d7715c3c20e088a86ffb7b6de0f26ac46b8dcbf88c42463722"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-calico.linux-arm64.tar.zst",
+    "sha256": "7b8e832bfde832d24335786c43a8c0aeede3c04e2aee4c8349822383f2fa390e"
   },
   "images-canal-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-canal.linux-amd64.tar.gz",
-    "sha256": "5a9f80bc26caade70a8c12391e1059c8fa1986f1f1940c426b0106a7dd44e746"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-canal.linux-amd64.tar.gz",
+    "sha256": "16275efc94e4a399f0edbbf5ebfe46d8c5c7784d5a4ea300c7313ebbb24190d8"
   },
   "images-canal-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-canal.linux-amd64.tar.zst",
-    "sha256": "7e3f80b037079922f6a0aaf5a701459ef550d67ca31119a0c74955254fa52b1e"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-canal.linux-amd64.tar.zst",
+    "sha256": "3a7828ce0143c3eb91cae940cebdfa0145960e91be056e88a8b077ee39ccc54d"
   },
   "images-canal-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-canal.linux-arm64.tar.gz",
-    "sha256": "0f690921d2e6564cc2dc635f8a8bff9a6ea0cc9102b69ae3483ba811cfe227dc"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-canal.linux-arm64.tar.gz",
+    "sha256": "14fb90f2931bea3f030e7ba6c682013911260177bce91eadb2b45f23936465a5"
   },
   "images-canal-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-canal.linux-arm64.tar.zst",
-    "sha256": "50f4d1b1bb03523b922d7ce989d2d83f009d751d7fbf4aa8821fe52c9b9fd96d"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-canal.linux-arm64.tar.zst",
+    "sha256": "ede6d29451a99d7f4663b6a2b8eb0cfa093f83b7b025fd5c4899fb02edac703d"
   },
   "images-cilium-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-cilium.linux-amd64.tar.gz",
-    "sha256": "f662366fbb5640d698e653634372b695586ef615aa00b333734a472a9396c11b"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-cilium.linux-amd64.tar.gz",
+    "sha256": "59f494c03d9aa0f96d99d28e505fae57dd2c30907ea055b888705555ae289d3c"
   },
   "images-cilium-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-cilium.linux-amd64.tar.zst",
-    "sha256": "5cfe063d25d30c92864adce166bf42f12a298b2754b150a5b7f6971a2ec42223"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-cilium.linux-amd64.tar.zst",
+    "sha256": "21ebfe2078b4ef92b2ac3dfe664fd48556cf2b79f9058dd3cd6ed5ed10fcbe1b"
   },
   "images-cilium-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-cilium.linux-arm64.tar.gz",
-    "sha256": "57e8ed0c6e1dff9d389e7ee73ba175fdfe8258a89a4156a8c6f7acd1c34b4431"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-cilium.linux-arm64.tar.gz",
+    "sha256": "766acd7cbff87a3eab89cc0dc433df34c5d44bfc5304872adfffa432f968450c"
   },
   "images-cilium-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-cilium.linux-arm64.tar.zst",
-    "sha256": "a9ecf7c81e9752351e5895753415bb4c1d15cce5e99b9b2eb7b0ec1eb022f642"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-cilium.linux-arm64.tar.zst",
+    "sha256": "6bd03722d01aa1d281da47318ddca6e1dafbac7acf23f7dc864c7799b4616479"
   },
   "images-core-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-core.linux-amd64.tar.gz",
-    "sha256": "0bdf829a73f66deaa824dffb57740c166f8ba6c374847eca2a2670971c99c281"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-core.linux-amd64.tar.gz",
+    "sha256": "4b61e3e97e6770b9a2625a21925282e1774bc9114f0a9df5392cd1199b4df744"
   },
   "images-core-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-core.linux-amd64.tar.zst",
-    "sha256": "d9ffc827deda8b3286503a7577617d06d1b9d925a5984ffc2acbe677bea07949"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-core.linux-amd64.tar.zst",
+    "sha256": "c9a0fe7e3a747fb01d19b0a846df97d4d53a31f563e5308d86401d6b000b031b"
   },
   "images-core-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-core.linux-arm64.tar.gz",
-    "sha256": "e7d3f58d535db9ca7bf01518db35d3768f22978c9401238ca2475f4b6477f618"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-core.linux-arm64.tar.gz",
+    "sha256": "899f8e8b8ece3d85384de407fd3f8d375daa9b6f0c1bbd54108426e22fa4a623"
   },
   "images-core-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-core.linux-arm64.tar.zst",
-    "sha256": "0f32a127391e09d0b245207e4785afc541ec936597055ac09d85d7eaf090e547"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-core.linux-arm64.tar.zst",
+    "sha256": "be6bc62be91cef6ebb9f995fb4a3e7ca68ab485eec7eb304d129c9d44d543e0c"
   },
   "images-flannel-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-flannel.linux-amd64.tar.gz",
-    "sha256": "f319b0f22b4d3e6021559ca2881a44b936318a36d8163542c7feebe4cc2f702e"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-flannel.linux-amd64.tar.gz",
+    "sha256": "56c322cf540988649257018f8be4cac80ff1fafb206c3efeb7cfc190d76eff6f"
   },
   "images-flannel-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-flannel.linux-amd64.tar.zst",
-    "sha256": "99e1aa2dcf3f39d736abaf8cddf229d9931ab4c80940881cd7c6b89ff357bd17"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-flannel.linux-amd64.tar.zst",
+    "sha256": "832aae87b5eba45be64b47a5ebc04824060095dbc79d58adb009dbc0b738252a"
   },
   "images-flannel-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-flannel.linux-arm64.tar.gz",
-    "sha256": "392b74460ac3bb3474ce04f19935432675884bcc2ae35ae6f9cf580dfc8213c0"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-flannel.linux-arm64.tar.gz",
+    "sha256": "ffc90536663d1edd4cd101e492d84dcd79dd1af1b3b16643786ab8a5d2fcccb7"
   },
   "images-flannel-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-flannel.linux-arm64.tar.zst",
-    "sha256": "c94fecb19b6b1eaa347c49fc60def2e1251d866714e9ab05ea6ce29d5da41fb3"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-flannel.linux-arm64.tar.zst",
+    "sha256": "39b36764f09857c01eaa9520da3e2d5023d7df881bc72379e4c55d05ebde8f6f"
   },
   "images-harvester-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-harvester.linux-amd64.tar.gz",
-    "sha256": "2a062316cbd4942d1786468d41cfdfc7dad6ac52a4a96a2197ed71f875980d20"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-harvester.linux-amd64.tar.gz",
+    "sha256": "93e0f6a8e5024f054cdce242aea4fdb833e476d7b2531b454f5f3267f724594e"
   },
   "images-harvester-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-harvester.linux-amd64.tar.zst",
-    "sha256": "e6cf677021b2c5e448faec2aedc4b2aa3b5db8410318f96f2ea156bab380e708"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-harvester.linux-amd64.tar.zst",
+    "sha256": "2b72f3bf1485a986d4a325cd15cb12163f4acabcdd4fcf77400a4c226a26c097"
   },
   "images-harvester-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-harvester.linux-arm64.tar.gz",
-    "sha256": "4d90036f9fce836fc38623e120e6d9237b2a580717361fc86c1e4ccdadc16a5a"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-harvester.linux-arm64.tar.gz",
+    "sha256": "4e675fca42ba1862810e021570f58462046e11fb92552d699e20d314be4dd54f"
   },
   "images-harvester-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-harvester.linux-arm64.tar.zst",
-    "sha256": "391888ab6a14ce3674fb5828a420677e37389b4090c30c9d4177ff5aaa8d7124"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-harvester.linux-arm64.tar.zst",
+    "sha256": "c642cadb4f1ccf8439e3c47b10933cae6db0d29c2d9bb9b45267ca69191b0c3f"
   },
   "images-multus-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-multus.linux-amd64.tar.gz",
-    "sha256": "a7c646feb9d06f894bf35900aa2eabc9634399758f399217823630154ee5023b"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-multus.linux-amd64.tar.gz",
+    "sha256": "080cbffc7710eb25167e65619101b9cbfbd80d6510da2c857a7fe2d70140358d"
   },
   "images-multus-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-multus.linux-amd64.tar.zst",
-    "sha256": "035612c8628d1d18548082bfd72db0393949fbfd5f21a35d96e22dc7070a5d52"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-multus.linux-amd64.tar.zst",
+    "sha256": "108543225439fc50053a904b953813a39a0d0d4e6c7a76a2e99a8ee26a69f1a2"
   },
   "images-multus-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-multus.linux-arm64.tar.gz",
-    "sha256": "ef91e7d9b352303e086f8167527dce337f5ddf8d79833c8180f5548ceb7aeff7"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-multus.linux-arm64.tar.gz",
+    "sha256": "1009e845edf77dbe04e8d815ce036c73f1309c0a4a2ec69abafb3e058365513c"
   },
   "images-multus-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-multus.linux-arm64.tar.zst",
-    "sha256": "00f7366eae2e397625e56a1d014632de37ec545276e2632920a416289e175493"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-multus.linux-arm64.tar.zst",
+    "sha256": "f76f06cd2344a2c44283733c0e02a94b1bea6c63bc0b7cb6aa2871a474661628"
   },
   "images-traefik-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-traefik.linux-amd64.tar.gz",
-    "sha256": "234b205b7ca6698759aff22a3a5b4b2c426224c035added48f5317f37322a690"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-traefik.linux-amd64.tar.gz",
+    "sha256": "4268db05101d1022ee1002f46516aebeac1b9f8171288ea2d14ddd4763b35ff1"
   },
   "images-traefik-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-traefik.linux-amd64.tar.zst",
-    "sha256": "ffdcdf38e2b9d7ceaa9d158f55294ea350015fa69e9b1a18587e8eb6bff7847e"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-traefik.linux-amd64.tar.zst",
+    "sha256": "aec23459c8e51ec16491b4657a3b2a64e49357d3e6cef0a11ac7d3c2f285fe4b"
   },
   "images-traefik-linux-arm64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-traefik.linux-arm64.tar.gz",
-    "sha256": "6351a0ceebbb0f643de5cb1003b0cc27ca51e3974fdcac3eb3b893c3b15c827a"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-traefik.linux-arm64.tar.gz",
+    "sha256": "39381c15bf462071edeb8f735d447ec6d750cc23f6dd3efb45d7b38193ccb7a2"
   },
   "images-traefik-linux-arm64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-traefik.linux-arm64.tar.zst",
-    "sha256": "9b19e64407a5e12c73d9c00a121e1d78481ef2fa2e7597a9e20a201a6c527013"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-traefik.linux-arm64.tar.zst",
+    "sha256": "dd5efa19d02ca7a8a0bcb05febd2781e8ad85016c09b1defe09cdc5f494f05fc"
   },
   "images-vsphere-linux-amd64-tar-gz": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-vsphere.linux-amd64.tar.gz",
-    "sha256": "d4a7b1e21fb54d53c1ef4e571f52cbc8c41b6b74e4824eb27536ebb6a2277df2"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-vsphere.linux-amd64.tar.gz",
+    "sha256": "6bcd307750c4077eca4cf934dffa4e93277479512639f4c2458f0b0b0eb2cddb"
   },
   "images-vsphere-linux-amd64-tar-zst": {
-    "url": "https://github.com/rancher/rke2/releases/download/v1.33.8%2Brke2r1/rke2-images-vsphere.linux-amd64.tar.zst",
-    "sha256": "a40b47dc7ba754fc4259106087e327de76269c8be926e5f710c0a2e77fcf900b"
+    "url": "https://github.com/rancher/rke2/releases/download/v1.33.12%2Brke2r1/rke2-images-vsphere.linux-amd64.tar.zst",
+    "sha256": "707374e5a6066ec39b70f46ac43e5ca7c10a04811c509dbbacd3edd2cbc8fc0f"
   }
 }

@@ -48,6 +48,8 @@ rec {
     groupBy
     subtractLists
     genAttrs
+    concatMap
+    unique
     ;
 
   handlers = rec {
@@ -78,6 +80,7 @@ rec {
     manual = [
       "removal"
       "deprecated"
+      "broken"
     ];
     # Problem kinds that are currently only allowed to be specified once
     unique = [
@@ -101,7 +104,7 @@ rec {
         # If `description` is not defined, the derivation is probably not a package.
         # Simply checking whether `meta` is defined is insufficient,
         # as some fetchers and trivial builders do define meta.
-        attrs:
+        config: attrs:
         # Order of checks optimised for short-circuiting the common case of having maintainers
         (attrs.meta.maintainers or [ ] == [ ])
         && (attrs.meta.teams or [ ] == [ ])
@@ -109,13 +112,34 @@ rec {
         && (attrs ? meta.description);
       value.message = "This package has no declared maintainer, i.e. an empty `meta.maintainers` and `meta.teams` attribute.";
     }
+    {
+      kindName = "broken";
+      condition =
+        config:
+        let
+          # TODO: Consider deprecating this or making it generic for all problems
+          allowBroken = config.allowBroken || builtins.getEnv "NIXPKGS_ALLOW_BROKEN" == "1";
+
+          allowBrokenPredicate =
+            lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605)
+              "config.allowBrokenPredicate is deprecated, use config.problems.handlers.myPackage.broken = \"warn\" for individual packages instead."
+              config.allowBrokenPredicate;
+        in
+        if allowBroken then
+          attrs: false
+        else if config ? allowBrokenPredicate then
+          attrs: attrs ? meta.broken && attrs.meta.broken && !allowBrokenPredicate attrs
+        else
+          attrs: attrs ? meta.broken && attrs.meta.broken;
+      value.message = "This package is broken.";
+    }
   ];
 
   genAutomaticProblems =
-    attrs:
+    config: attrs:
     listToAttrs (
       map (problem: lib.nameValuePair problem.kindName problem.value) (
-        filter (problem: problem.condition attrs) automaticProblems
+        filter (problem: problem.condition config attrs) automaticProblems
       )
     );
 
@@ -310,7 +334,10 @@ rec {
         };
       };
 
-    Returns both the structure itself for inspection and a function that can query it with very few allocations/lookups
+      Returns:
+      - the structure itself for inspection
+      - a function that can query the structure with very few allocations/lookups
+      - a list of problem kinds/names/packages that require handling
 
     This allows collapsing arbitrarily many problem handlers/matchers into a predictable structure that can be queried in a predictable and fast way
   */
@@ -331,6 +358,20 @@ rec {
             }) forPackage
           ) config.problems.handlers
         );
+
+      # Lookup table for all the kinds/names/packages that actually need to be
+      # handled
+      definedConstraints = listToAttrs (
+        map (ident: {
+          name = "${ident}s"; # plural
+          value = unique (
+            concatMap (
+              constraint:
+              optionals (constraint.${ident} != null && constraint.handler != "ignore") [ (constraint.${ident}) ]
+            ) constraints
+          );
+        }) identOrder
+      );
 
       getHandler =
         list:
@@ -390,26 +431,27 @@ rec {
       switch = doLevel 0 constraints;
     in
     {
-      inherit switch;
+      inherit switch definedConstraints;
       handlerForProblem =
         if isString switch then
-          pname: name: kind:
+          kind: name: pname:
           switch
         else
-          pname: name: kind:
+          kind:
           let
-            switch' = switch.kindSpecific.${kind} or switch.kindFallback;
+            kindSwitch = switch.kindSpecific.${kind} or switch.kindFallback;
           in
-          if isString switch' then
-            switch'
+          if isString kindSwitch then
+            name: pname: kindSwitch
           else
+            name:
             let
-              switch'' = switch'.nameSpecific.${name} or switch'.nameFallback;
+              nameSwitch = kindSwitch.nameSpecific.${name} or kindSwitch.nameFallback;
             in
-            if isString switch'' then
-              switch''
+            if isString nameSwitch then
+              pname: nameSwitch
             else
-              switch''.packageSpecific.${pname} or switch''.packageFallback;
+              pname: nameSwitch.packageSpecific.${pname} or nameSwitch.packageFallback;
     };
 
   genCheckProblems =
@@ -418,40 +460,50 @@ rec {
       # This is here so that it gets cached for a (checkProblems config) thunk
       inherit (genHandlerSwitch config)
         handlerForProblem
+        definedConstraints
         ;
+
+      # All the problem kinds that actually need to be checked
+      configuredProblems = definedConstraints.kinds ++ definedConstraints.names;
+
+      # Filter out any problems that are always ignored in config.problems.
+      # Makes sure to cache the condition by appliny config, and the handler
+      # by applying the problem's kind and name
+      automaticProblemsConfigCache = concatMap (
+        problem:
+        optional (elem problem.kindName configuredProblems) {
+          condition = problem.condition config;
+          handler = handlerForProblem problem.kindName problem.kindName;
+        }
+      ) automaticProblems;
     in
     attrs:
-    let
-      pname = getName attrs;
-      manualProblems = attrs.meta.problems or { };
-    in
     if
       # Fast path for when there's no problem that needs to be handled
-      # No automatic problems that needs handling
       all (
-        problem:
-        problem.condition attrs -> handlerForProblem pname problem.kindName problem.kindName == "ignore"
-      ) automaticProblems
+        problem: problem.condition attrs -> problem.handler (getName attrs) == "ignore"
+      ) automaticProblemsConfigCache
       && (
         # No manual problems
-        manualProblems == { }
+        !attrs ? meta.problems
         # Or all manual problems are ignored
-        || all (name: handlerForProblem pname name (manualProblems.${name}.kind or name) == "ignore") (
-          attrNames manualProblems
-        )
+        || all (
+          name: handlerForProblem (attrs.meta.problems.${name}.kind or name) name (getName attrs) == "ignore"
+        ) (attrNames attrs.meta.problems)
       )
     then
       null
     else
       # Slow path, only here we actually figure out which problems we need to handle
       let
-        problems = attrs.meta.problems or { } // genAutomaticProblems attrs;
+        pname = getName attrs;
+        problems = attrs.meta.problems or { } // genAutomaticProblems config attrs;
         problemsToHandle = filter (v: v.handler != "ignore") (
           mapAttrsToList (name: problem: rec {
             inherit name;
             # Kind falls back to the name
             kind = problem.kind or name;
-            handler = handlerForProblem pname name kind;
+            handler = handlerForProblem kind name pname;
             inherit problem;
           }) problems
         );
@@ -485,6 +537,11 @@ rec {
           null
         else
           {
+            reason = "problem";
+            # Only there for PR CI evaluation
+            handleProblem =
+              handleEvalIssue:
+              lib.foldl' (result: problem: handleEvalIssue problem.kind (fullMessage problem)) true errorProblems;
             msg = ''
               has problems:
               ${concatMapStringsSep "\n" (x: "- ${fullMessage x}") errorProblems}

@@ -20,7 +20,7 @@
   libxext,
   wayland-protocols,
   wayland,
-  xxHash,
+  xxhash,
   nerd-fonts,
   lcms2,
   librsync,
@@ -39,33 +39,32 @@
   zsh,
   fish,
   nixosTests,
-  go_1_24,
-  buildGo124Module,
+  go_1_26,
+  buildGo126Module,
   nix-update-script,
   makeBinaryWrapper,
   darwin,
   cairo,
-  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.45.0";
+  version = "0.47.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-3XQWmLd8F0ndzzLOcV/7144M9enqc/7FULVLeM2Kpts=";
+    hash = "sha256-hRQ/1EMBt04Er1OfLg1W9fIma3NZBHZklW1N4DmFBpM=";
   };
 
   goModules =
-    (buildGo124Module {
+    (buildGo126Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-aLl9hPfRmUE8VARwkwXhxjzDPKUGNGD+yzxY5pUIcgs=";
+      vendorHash = "sha256-zZZDrWzl2q/o4f52diE0YDV/MdYfsdKWWjQ0ej2bBTM=";
     }).goModules;
 
   buildInputs = [
@@ -76,7 +75,7 @@ buildPythonApplication rec {
     librsync
     matplotlib
     openssl.dev
-    xxHash
+    xxhash
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libpng
@@ -110,7 +109,7 @@ buildPythonApplication rec {
     sphinx-copybutton
     sphinxext-opengraph
     sphinx-inline-tabs
-    go_1_24
+    go_1_26
     fontconfig
     makeBinaryWrapper
   ]
@@ -153,6 +152,7 @@ buildPythonApplication rec {
   env = {
     CGO_ENABLED = 0;
     GOFLAGS = "-trimpath";
+    GOTOOLCHAIN = "local";
   };
 
   configurePhase = ''
@@ -215,29 +215,36 @@ buildPythonApplication rec {
   ];
 
   # skip failing tests due to darwin sandbox
-  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preCheck =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace kitty_tests/check_build.py \
+        --replace test_macos_dictation_forwarding no_test_macos_dictation_forwarding
 
-    substituteInPlace kitty_tests/file_transmission.py \
-      --replace test_transfer_send dont_test_transfer_send
+      substituteInPlace kitty_tests/file_transmission.py \
+        --replace test_transfer_send dont_test_transfer_send
 
-    substituteInPlace kitty_tests/ssh.py \
-      --replace test_ssh_connection_data no_test_ssh_connection_data \
-      --replace test_ssh_shell_integration no_test_ssh_shell_integration \
-      --replace test_ssh_copy no_test_ssh_copy \
-      --replace test_ssh_env_vars no_test_ssh_env_vars
+      substituteInPlace kitty_tests/ssh.py \
+        --replace test_ssh_connection_data no_test_ssh_connection_data \
+        --replace test_ssh_shell_integration no_test_ssh_shell_integration \
+        --replace test_ssh_copy no_test_ssh_copy \
+        --replace test_ssh_env_vars no_test_ssh_env_vars
 
-    substituteInPlace kitty_tests/shell_integration.py \
-      --replace test_fish_integration no_test_fish_integration \
-      --replace test_zsh_integration no_test_zsh_integration
+      substituteInPlace kitty_tests/shell_integration.py \
+        --replace test_fish_integration no_test_fish_integration \
+        --replace test_zsh_integration no_test_zsh_integration
 
-    substituteInPlace kitty_tests/fonts.py \
-      --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
+      substituteInPlace kitty_tests/fonts.py \
+        --replace test_fallback_font_not_last_resort no_test_fallback_font_not_last_resort
 
-    # theme collection test starts an http server
-    rm tools/themes/collection_test.go
-    # passwd_test tries to exec /usr/bin/dscl
-    rm tools/utils/passwd_test.go
-  '';
+      # theme collection test starts an http server
+      rm tools/themes/collection_test.go
+      # passwd_test tries to exec /usr/bin/dscl
+      rm tools/utils/passwd_test.go
+    ''
+    + ''
+      # These depend on files that are not available in the sandbox
+      rm tools/utils/machine_id/api_test.go
+    '';
 
   checkPhase = ''
     runHook preCheck

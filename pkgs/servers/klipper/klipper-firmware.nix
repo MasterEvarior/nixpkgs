@@ -7,7 +7,7 @@ args@{
   bintools-unwrapped,
   libffi,
   libusb1,
-  wxGTK32,
+  wxwidgets_3_2,
   python3,
   gcc-arm-embedded,
   klipper,
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     avrdude
     stm32flash
     pkg-config
-    wxGTK32 # Required for bossac
+    wxwidgets_3_2 # Required for bossac
   ];
 
   configurePhase = ''
@@ -72,6 +72,7 @@ stdenv.mkDerivation {
     cp ./.config $out/config
     cp out/klipper.bin $out/ || true
     cp out/klipper.elf $out/ || true
+    cp out/klipper.elf.hex $out/ || true
     cp out/klipper.uf2 $out/ || true
 
     mkdir -p $out/lib/
@@ -95,7 +96,11 @@ stdenv.mkDerivation {
 
   passthru = {
     makeFlasher =
-      { flashDevice }:
+      {
+        flashDevice ? null,
+        canbusNetwork ? null,
+        canbusDevice ? null,
+      }:
       klipper-flash.override {
         klipper-firmware = klipper-firmware.override args;
         inherit
@@ -103,6 +108,8 @@ stdenv.mkDerivation {
           firmwareConfig
           mcu
           flashDevice
+          canbusNetwork
+          canbusDevice
           ;
       };
   };

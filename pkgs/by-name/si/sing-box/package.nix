@@ -10,26 +10,30 @@
 
 buildGoModule (finalAttrs: {
   pname = "sing-box";
-  version = "1.13.0";
+  version = "1.13.13";
 
   src = fetchFromGitHub {
     owner = "SagerNet";
     repo = "sing-box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lhkz/mXydZz5iJllqSp4skA4+jxs8oUmon/oFs98Zfc=";
+    hash = "sha256-RsiBxPQOE4rE3cFRjl81x1uIG2A4/smSBUg+G0vm7uQ=";
   };
 
-  vendorHash = "sha256-vVLaG0PV1OXA+YL67BnrHJiSkNVzJbZ8TeMKbO2rMu0=";
+  vendorHash = "sha256-FUzGQx0TIJdWWYtF6781BSXLViFrXbPEdLKjuvtuleM=";
 
   tags = [
+    "with_gvisor"
     "with_quic"
     "with_dhcp"
     "with_wireguard"
     "with_utls"
     "with_acme"
     "with_clash_api"
-    "with_gvisor"
     "with_tailscale"
+    "with_ccm"
+    "with_ocm"
+    "badlinkname"
+    "tfogo_checklinkname0"
   ];
 
   subPackages = [
@@ -42,6 +46,8 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-X=github.com/sagernet/sing-box/constant.Version=${finalAttrs.version}"
+    "-X=internal/godebug.defaultGODEBUG=multipathtcp=0"
+    "-checklinkname=0"
   ];
 
   postInstall = ''

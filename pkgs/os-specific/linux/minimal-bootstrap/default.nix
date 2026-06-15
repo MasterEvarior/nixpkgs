@@ -71,12 +71,6 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        busybox-static = callPackage ./busybox/static.nix {
-          gcc = gcc-latest;
-          gnumake = gnumake-musl;
-          gnutar = gnutar-latest;
-        };
-
         bzip2 = callPackage ./bzip2 {
           tinycc = tinycc-musl;
           gnumake = gnumake-musl;
@@ -367,7 +361,11 @@ lib.makeScope
           gnutar = gnutar-latest;
         };
 
-        inherit (callPackage ./utils.nix { }) derivationWithMeta writeTextFile writeText;
+        inherit (callPackage ./utils.nix { inherit hostPlatform; })
+          derivationWithMeta
+          writeTextFile
+          writeText
+          ;
         test = kaem.runCommand "minimal-bootstrap-test" { } (
           ''
             echo ${bash.tests.get-version}
@@ -376,7 +374,6 @@ lib.makeScope
             echo ${binutils.tests.get-version}
             echo ${binutils-static.tests.get-version}
             echo ${bison.tests.get-version}
-            echo ${busybox-static.tests.get-version}
             echo ${bzip2.tests.get-version}
             echo ${bzip2-static.tests.get-version}
             echo ${coreutils-musl.tests.get-version}

@@ -12,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "3.5.0";
+  version = "4.7.0";
 
   outputs = [
     "out"
@@ -24,14 +24,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jm0mrxhjjggnfgp0mnau/LI0HwA8A9NkLIwm/ongI/s=";
+    hash = "sha256-ek+h/MWxvUZKfUKSYL501+qqwFKHifopj2PicvnEr0Y=";
   };
 
   postPatch = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
+    substituteInPlace plugin/skim.vim \
+      --replace-fail "expand('<sfile>:h:h')" "'$out'"
   '';
 
-  cargoHash = "sha256-AU7Mkyjq3I6RmVlYz6A/AEgEyL0q1LwmagYT9v3j60U=";
+  cargoHash = "sha256-n+fLtinvMchjsztH5GmPIjG+2spUu0Ayw9yqHTJRxAQ=";
 
   nativeBuildInputs = [ installShellFiles ];
   nativeCheckInputs = [
@@ -65,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   useNextest = true;
 
   checkPhase = ''
-    cargo nextest run --features test-utils --release --offline --lib --bins --examples --tests
+    cargo nextest run --release --offline --lib --bins --examples --tests
   '';
 
   passthru = {

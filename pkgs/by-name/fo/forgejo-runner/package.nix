@@ -22,12 +22,14 @@ let
     # Requires running Docker daemon
     "TestDocker"
     "TestJobExecutor"
+    "TestRunContext_PrepareJobContainer/Overlapping"
     "TestRunExec"
     "TestRunner"
     "Test_validateCmd"
 
     # Docker network request for image
     "TestImageExistsLocally"
+    "TestStepDockerMain"
 
     # Reaches out to different websites
     "TestFindGitRemoteURL"
@@ -41,25 +43,29 @@ let
     # These tests rely on outbound IP address
     "TestHandler"
     "TestHandler_gcCache"
+
+    # Timeouts
+    "TestRunJob_WithConnectionFromCommandOptions"
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Uses docker-specific options, unsupported on Darwin
     "TestMergeJobOptions"
+    "TestNewEndpointHonoursTLSEnv"
   ];
 in
 buildGoModule (finalAttrs: {
   pname = "forgejo-runner";
-  version = "12.7.1";
+  version = "12.11.1";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-agPlx+bBBqFZnoxxedVvKcAZ7QP09YqaY3TfOunDBOM=";
+    hash = "sha256-Qc43zWDDCjL8RW9Q30H4N5VRSFT3LR4Pt8/P0NcMacU=";
   };
 
-  vendorHash = "sha256-wGCOcrQRxe+1P7deuPwox8yo2GXhI9GgXuMTY81TFKo=";
+  vendorHash = "sha256-du7fXehcxZ70Lsr5VCkz646G0Us/XwM4Sl98HXimoao=";
 
   nativeBuildInputs = [ makeWrapper ];
 

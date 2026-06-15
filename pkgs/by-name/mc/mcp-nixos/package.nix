@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mcp-nixos";
-  version = "2.2.0";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/3/MUCjUu4iQOEmgda61ztO2d6e/HPpjsF9Z7hTWYMc=";
+    hash = "sha256-mWq9nnL4IGhUFkXJr8+t6BresOTDFS1caG8NuFqjrJg=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -26,11 +27,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    anthropic
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
-    python-dotenv
+    pytest-cov-stub
   ];
 
   disabledTestPaths = [
@@ -41,6 +40,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTests = [
     # Requires network access
     "test_valid_channel"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_read_text_file"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];
